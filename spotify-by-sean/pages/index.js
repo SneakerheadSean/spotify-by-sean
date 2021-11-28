@@ -3,13 +3,9 @@ import Sidebar from '../components/Sidebar'
 
 export default function Home() {
   return (
-    <div className="">
-      <Head>
-        <title>Spotify-by-Sean</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <main>
+    <div className="bg-black h-screen overflow-hidden">
+      
+      <main className="">
         <Sidebar />
         {/* Main Contet area */}
       </main>
