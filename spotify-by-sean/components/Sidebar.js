@@ -7,10 +7,23 @@ import {
   SearchIcon,
 } from "@heroicons/react/outline";
 import { signOut, useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
+import { useSpotify } from "../hooks/useSpotify";
+
 
 const Sidebar = () => {
+  const spotifyAPI = useSpotify()
   const { data: session, status } = useSession()
-  console.log(session)
+  const [playlists, setPlaylist] = useState([])
+  
+  useEffect(() => {
+    if (spotifyAPI.getAccessToken()) {
+      spotifyAPI.getUserPlaylists().then((data) => {
+        setPlaylist(data.body.items)
+      })
+    }
+  }, [session, spotifyAPI])
+  
   return (
     <div className="text-gray-500 p-5 text-sm border-r border-gray-900 overflow-y-scroll scrollbar-hide h-screen">
       <div className="space-y-4">
@@ -50,16 +63,12 @@ const Sidebar = () => {
 
         <hr className="border-t-[0.1px] border-gray-gray-900" />
 
-        {/* playlist... */}
-
-        <p className="cursor-pointer hover:text-white">Playlist name</p>
-        <p className="cursor-pointer hover:text-white">Playlist name</p>
-        <p className="cursor-pointer hover:text-white">Playlist name</p>
-        <p className="cursor-pointer hover:text-white">Playlist name</p>
-        <p className="cursor-pointer hover:text-white">Playlist name</p>
-        <p className="cursor-pointer hover:text-white">Playlist name</p>
-        <p className="cursor-pointer hover:text-white">Playlist name</p>
-        <p className="cursor-pointer hover:text-white">Playlist name</p>
+        {playlists.map((playlist, index) => (
+          <p key={playlist.id} className="cursor-pointer hover:text-white">
+            {playlist.name}
+          </p>
+        )
+        )}
       </div>
     </div>
   )
